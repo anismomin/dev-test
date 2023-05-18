@@ -211,3 +211,11 @@ gulp.task('customJS', () => {
  * Watches for file changes and runs specific tasks.
  */
 gulp.task('production', gulp.parallel('styles', 'customJS'));
+
+
+/**
+ * Build for Development.
+ *
+ * Watches for file changes and runs specific tasks.
+ */
+gulp.task('default', gulp.parallel('styles', 'customJS'));
