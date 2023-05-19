@@ -58,6 +58,7 @@ const isProduction = (argv.production !== undefined);
 const postCssProd = [cssnext(), cssnano()];
 const postCssDev = [cssnext()];
 
+console.log(isProduction);
 /**
  * Custom Error Handler.
  *
@@ -83,7 +84,9 @@ const browsersync = done => {
 		injectChanges: config.injectChanges,
 		watchEvents: ['change', 'add', 'unlink', 'addDir', 'unlinkDir'],
 	});
-
+	// gulp.watch(config.watchStyles, gulp.series('styles'));
+    // gulp.watch(config.watchJsCustom, gulp.series('customJS'));
+    // gulp.watch(config.watchPhp, browserSync.reload);
 	done();
 };
 
@@ -94,12 +97,23 @@ const reload = done => {
 };
 
 /**
+ * Task: `watch task`.
+ */
+
+const watchtask = () => {
+	gulp.watch(config.watchStyles, gulp.series('styles'));
+    gulp.watch(config.watchJsCustom, gulp.series('customJS'));
+    gulp.watch(config.watchPhp, browserSync.reload);
+};
+
+
+/**
  * Task: `styles`.
  *
  * This task does the following:
  *    1. Gets the source scss file
  *    2. Compiles Sass to CSS
- *    3. Writes Sourcemaps for it
+ *    3. Wri tes Sourcemaps for it
  *    4. Auto-prefixes it and generates style.css
  *    5. Renames the CSS file with suffix .min.css
  *    6. Minifies the CSS file and generates style.min.css
@@ -218,4 +232,5 @@ gulp.task('production', gulp.parallel('styles', 'customJS'));
  *
  * Watches for file changes and runs specific tasks.
  */
-gulp.task('default', gulp.parallel('styles', 'customJS'));
+gulp.task('default', gulp.series('styles', 'customJS', browsersync, watchtask));
+
