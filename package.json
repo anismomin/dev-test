@@ -39,6 +39,7 @@
     "gulp-rename": "^2.0.0",
     "gulp-rtlcss": "^2.0.0",
     "gulp-sass": "^5.1.0",
+    "gulp-size": "^4.0.1",
     "gulp-sort": "^2.0.0",
     "gulp-sourcemaps": "^3.0.0",
     "gulp-uglify": "^3.0.2",
@@ -52,5 +53,8 @@
     "dotenv": "^16.0.3",
     "include-media": "^1.4.10",
     "sass": "^1.57.1"
+  },
+  "volta": {
+    "node": "16.20.0"
   }
 }

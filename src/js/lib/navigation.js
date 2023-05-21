@@ -53,5 +53,5 @@
     }
 
     // Add Event Listener to Window to Check if Navigation Has Scrolled
-    window.addEventListener('scroll', handleScroll)
+    // window.addEventListener('scroll', handleScroll)
 })();

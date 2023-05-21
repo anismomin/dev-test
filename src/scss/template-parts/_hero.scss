@@ -17,7 +17,7 @@
 		position: relative;
 		padding-top: rem-calc(61);
 		padding-bottom: rem-calc(64);
-
+	
 		@include media('>phone-small') {
 			display: flex;
 			align-content: center;
@@ -182,6 +182,26 @@
 				}
 			}
 		}
+
+		&-top {
+			position: absolute;
+			z-index: 3;
+			right: 1px;
+			top: 40px;
+			width: 31.5%;
+			margin-left: auto;
+			margin-right: auto;
+		}
+
+		&-bottom {
+			position: absolute;
+			z-index: 3;
+			left: -16px;
+			bottom: 17px;
+			width: 31.5%;
+			margin-left: auto;
+			margin-right: auto;
+		}
 	}
 
 	&__picture {
@@ -309,6 +329,7 @@
 		padding-left: rem-calc(34);
 		padding-right: rem-calc(34);
 
+
 		@include media('>phone-small') {
 			width: 47%;
 			padding-left: 0;
@@ -343,6 +364,7 @@
 		&__text {
 			width: 87%;
 			margin-bottom: rem-calc(36);
+			line-height: 1.36;
 
 			@include media('>tablet') {
 				margin-bottom: rem-calc(40);

@@ -9,12 +9,16 @@
 					<img src="src/images/hero/main.jpg" alt="" class="hero__image">
 				</picture>
 			</div>
-			<picture class="hero__picture hero__picture-top">
-				<img src="src/images/hero/top.jpg" alt="" class="hero__image">
-			</picture>
-			<picture class="hero__picture hero__picture-bottom">
-				<img src="src/images/hero/bottom.jpg" alt="" class="hero__image">
-			</picture>
+			<div class="hero__media-top">
+				<picture class="hero__picture hero__picture-top">
+					<img src="src/images/hero/top.jpg" alt="" class="hero__image">
+				</picture>
+			</div>
+			<div class="hero__media-bottom">
+				<picture class="hero__picture hero__picture-bottom">
+					<img src="src/images/hero/bottom.jpg" alt="" class="hero__image">
+				</picture>
+			</div>
 		</div>
 		<div class="hero__content hero-content">
 			<header class="hero__header hero-header">

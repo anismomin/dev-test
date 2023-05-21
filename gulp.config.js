@@ -36,6 +36,12 @@ module.exports = {
 	watchStyles: './src/scss/**/*.scss', // Path to all *.scss files inside css folder and inside them.
 	watchJsCustom: './src/js/**/*.js', // Path to all custom JS files.
 	watchPhp: './**/*.php', // Path to all PHP files.
+	
+	// Pot File options.
+	textDomain: 'DevTest',
+	translationFile: 'devTest.pot', // Name of the transalation file.
+	packageName: 'devTest', // Package name.
+	potFileDestination: './dist/language/', // Path to pot files.
 
 	// Browsers you care about for autoprefixing. Browserlist https://github.com/ai/browserslist
 	BROWSERS_LIST: [

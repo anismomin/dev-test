@@ -48,17 +48,18 @@ const sourcemaps = require('gulp-sourcemaps');
 const notify = require('gulp-notify');
 const browserSync = require('browser-sync').create();
 const cache = require('gulp-cache');
+const size = require('gulp-size');
 const plumber = require('gulp-plumber');
 const beep = require('beepbeep');
 const gulpif = require('gulp-if');
 const argv = require('yargs').argv;
+const wpPot = require('gulp-wp-pot');
 
 // Variables Used within Build Process
 const isProduction = (argv.production !== undefined);
 const postCssProd = [cssnext(), cssnano()];
 const postCssDev = [cssnext()];
 
-console.log(isProduction);
 /**
  * Custom Error Handler.
  *
@@ -84,9 +85,6 @@ const browsersync = done => {
 		injectChanges: config.injectChanges,
 		watchEvents: ['change', 'add', 'unlink', 'addDir', 'unlinkDir'],
 	});
-	// gulp.watch(config.watchStyles, gulp.series('styles'));
-    // gulp.watch(config.watchJsCustom, gulp.series('customJS'));
-    // gulp.watch(config.watchPhp, browserSync.reload);
 	done();
 };
 
@@ -95,17 +93,6 @@ const reload = done => {
 	browserSync.reload(() => {});
 	done();
 };
-
-/**
- * Task: `watch task`.
- */
-
-const watchtask = () => {
-	gulp.watch(config.watchStyles, gulp.series('styles'));
-    gulp.watch(config.watchJsCustom, gulp.series('customJS'));
-    gulp.watch(config.watchPhp, browserSync.reload);
-};
-
 
 /**
  * Task: `styles`.
@@ -220,11 +207,87 @@ gulp.task('customJS', () => {
 });
 
 /**
+ * Task: `images`.
+ *
+ * Optimize image and move to dist image folder.
+ *
+ * This task does the following:
+ *     1. Gets the source folder for images
+ *     2. optimize images
+ *     3. move those to dist images folder
+ * 	   4. Show size of image files
+ */
+gulp.task('images', async () => {
+	const imagemin = await import('gulp-imagemin');
+	gulp.src(`${config.imgSRC}.{jpg,png,svg,gif,webp}`)
+	.pipe(plumber(errorHandler))
+	.pipe(cache(imagemin.default([
+		imagemin.mozjpeg({ quality: 60, progressive: true }),
+		imagemin.optipng({ optimizationLevel: 5, interlaced: null }),
+		imagemin.svgo({
+			plugins: [
+				{
+					name: 'removeViewBox',
+					active: true
+				},
+				{
+					name: 'cleanupIDs',
+					active: false
+				}
+			]
+		})
+	]), {
+		// Bucket to store images in cache.
+		name: 'images'
+	}))
+	.pipe(gulp.dest(config.imgDST))
+	.pipe(size({showFiles: true}));
+});
+
+/**
+ * Task: `clear All cache`.
+ */
+gulp.task('clearCache', () =>
+    cache.clearAll()
+);
+
+/**
+ * Task: `watch task`.
+ */
+
+const watchChanges = () => {
+	gulp.watch(config.watchStyles, gulp.series('styles'));
+    gulp.watch(config.watchJsCustom, gulp.series('customJS', reload));
+	gulp.watch(config.imgSRC, gulp.series('images', reload));
+    gulp.watch(config.watchPhp, reload);
+};
+
+
+ /**
+  * WP POT Translation File Generator.
+  *
+  * * This task does the following:
+  *     1. Gets the source of all the PHP files
+  *     2. Applies wpPot with the variable set at the top of this file
+  *     3. Generate a .pot file of i18n that can be used for l10n to build .mo file
+  */
+ gulp.task('translate',  () => {
+     return gulp.src(config.watchPhp)
+         .pipe(wpPot({
+             domain   : config.textDomain,
+             destFile  : config.translationFile,
+             package : config.packageName
+         }))
+        .pipe(gulp.dest(`${config.potFileDestination}/${config.packageName}.pot`))
+		.pipe(notify({message: '\n\n===> Pot file Generated\n', onLast: true}));
+ });
+
+/**
  * Build for Production.
  *
  * Watches for file changes and runs specific tasks.
  */
-gulp.task('production', gulp.parallel('styles', 'customJS'));
+gulp.task('production', gulp.series(gulp.parallel('styles', 'customJS', 'images'), 'translate'));
 
 
 /**
@@ -232,5 +295,5 @@ gulp.task('production', gulp.parallel('styles', 'customJS'));
  *
  * Watches for file changes and runs specific tasks.
  */
-gulp.task('default', gulp.series('styles', 'customJS', browsersync, watchtask));
+gulp.task('default', gulp.series(gulp.parallel('styles', 'customJS', 'images'), browsersync, watchChanges));
 

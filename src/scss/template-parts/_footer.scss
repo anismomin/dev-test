@@ -299,6 +299,13 @@
 
 
 	&__list {
+		display: flex;
+		flex-direction: column;
+		
+		@include media('>phone') {
+			flex-direction: row;
+		}
+
 		&-item {
 			@extend %arrow-block-button;
 

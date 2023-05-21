@@ -2,7 +2,7 @@
 	overflow: hidden;
 	position: relative;
 	padding-bottom: rem-calc(74);
-
+	    
 	@include media('>phone') {
 		padding-bottom: 0;
 	}
@@ -12,6 +12,20 @@
 
 		max-width: rem-calc(575);
 		padding: rem-calc(55) rem-calc(14) rem-calc(68);
+
+		&::before {
+			
+			@include media('>phone-small') {
+				content: "";
+				position: absolute;
+				top: 0;
+				left: -39.5%;
+				z-index: 1;
+				width: 49%;
+				height: 100%;
+				background-color: $color-licorice;
+			}
+		}
 
 		@include media('>phone') {
 			position: relative;
@@ -58,12 +72,28 @@
 
 			&-inner {
 				@extend %text-decoration__label-inner--light;
+
+				@include media('>phone-small') {
+					color: $color-mediumgray;
+					background-color: $color-slate;
+				}
+			}
+
+			@include media('>phone-small') {
+				color: $color-mediumgray;
+				background-color: $color-slate;
 			}
 		}
 
 		&__number {
 			@extend %text-decoration__number--light;
+
+			@include media('>phone-small') {
+				color: $color-slate;
+				// background-color: $color-slate;
+			}
 		}
+			
 	}
 
 	&-header {
@@ -95,7 +125,7 @@
 	}
 
 	&-content {
-		margin-bottom: rem-calc(76);
+		margin-bottom: rem-calc(65);
 
 		@include media('>phone') {
 			width: 40%;

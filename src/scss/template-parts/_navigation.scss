@@ -829,6 +829,14 @@
 	&__indicator {
 		font-size: rem-calc(14);
 		letter-spacing: 0.17px;
+		color: $color-orange;
+		font-family: $font-forza;
+		margin-right: rem-calc(15);
+		font-weight: normal;
+
+		@include media('>phone-small') {
+			display: none;
+		}
 	}
 
 	&__label {
